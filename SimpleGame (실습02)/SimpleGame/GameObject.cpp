@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameObject.h"
-
+//--------------------------------------------------------------------
+// 생성자 소멸자
 GameObject::GameObject()
 {
 	// 초기화
@@ -11,52 +12,52 @@ GameObject::GameObject()
 	m_nSize = 0.0f;
 }
 
-GameObject::GameObject(Vec3 pos, float size, Vec4 color)
-{
-	m_nPosition = pos;
-	m_nColor = color;
-	m_nSize = size;
-}
-
 GameObject::~GameObject()
 {
 }
+//--------------------------------------------------------------------
 
-void GameObject::IsInitialized(Vec3 pos, float size, Vec4 color)
-{
-	m_nPosition = pos;
-	m_nColor = color;
-	m_nSize = size;
-}
-
+//--------------------------------------------------------------------
+// 회전, 이동
 void GameObject::Move(Vec3 dir, float speed)
 {
 	SetPosition(Vec3{ m_nPosition.x + dir.x * speed, m_nPosition.y + dir.y * speed, m_nPosition.z + dir.z * speed });
 }
 
+void GameObject::Rotate(Vec3 vec3Axis, float fAngle)
+{
+}
+//--------------------------------------------------------------------
+
+
+// 그리기
 void GameObject::BuildObject(Renderer *g_Renderer)
-{
-	// 테스트용 사각형 함수 호출
-	g_Renderer->DrawSolidRect(m_nPosition.x, m_nPosition.y, m_nPosition.z, 
-							  m_nSize, 
-							  m_nColor.r, m_nColor.g, m_nColor.b, m_nColor.a);
-
-}
-
-void GameObject::Update()
-{
-	// 테스트용 무브함수
-	Move(Vec3{1, 0, 0}, 2.0f);
-}
-
-void GameObject::SetOOBB()
 {
 	
 }
 
+// 애니메이션
+void GameObject::Update()
+{
+	
+}
+
+// 충돌체크 박스
+void GameObject::SetOOBB()
+{
+}
+
+
+//--------------------------------------------------------------------
+// Set, Get
 void GameObject::SetPosition(Vec3 pos)
 {
 	m_nPosition = pos;
+}
+
+Vec3 GameObject::GetPosition()
+{
+	return Vec3(m_nPosition);
 }
 
 void GameObject::SetColor(Vec4 color)
@@ -73,3 +74,4 @@ void GameObject::SetMass(float mass)
 {
 	m_nMass = mass;
 }
+//--------------------------------------------------------------------

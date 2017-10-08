@@ -15,9 +15,10 @@ but WITHOUT ANY WARRANTY.
 
 #include "Renderer.h"
 #include "GameObject.h"
+#include "CRectangle.h"
 
 Renderer *g_Renderer = NULL;
-GameObject gameObject(Vec3{ 10, 10, 0 }, 10.0f, Vec4{ 1,0,0,0 });
+CRectangle rectangle(Vec3{ 10, 10, 0 }, 10.0f, Vec4{ 1,0,0,0 });
 
 enum MouseInputSide {
 	LEFT = 0,
@@ -38,8 +39,7 @@ void RenderScene(void)
 	g_Renderer->DrawSolidRect(0, 0, 0, 10, 1, 0, 1, 1);
 
 	// GameObject Test
-	//gameObject.IsInitialized(Vec3{ 10, 10, 0 }, 10.0f, Vec4{1,0,0,0});
-	gameObject.BuildObject(g_Renderer);
+	rectangle.BuildObject(g_Renderer);
 	
 
 	glutSwapBuffers();
@@ -48,7 +48,7 @@ void RenderScene(void)
 // 계속 실행
 void Idle(void)
 {
-	gameObject.Update();
+	rectangle.Update();
 	RenderScene();
 }
 

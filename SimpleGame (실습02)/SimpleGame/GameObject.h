@@ -15,22 +15,23 @@ private:
 
 public:
 	GameObject();
-	GameObject(Vec3 pos, float size, Vec4 color);
-	~GameObject();
-
-	void IsInitialized(Vec3 pos, float size, Vec4 color);
+	virtual ~GameObject();
 
 	//-------------------
 	void Move(Vec3 dir, float speed);
+	void Rotate(Vec3 pxmf3Axis, float fAngle);
 	//-------------------
 
-	void BuildObject(Renderer *g_Renderer);		// 오브젝트 생성
-	void Update();			// 프레임 업데이트
+	virtual void BuildObject(Renderer *g_Renderer);		// 오브젝트 생성
+	virtual void Update();								// 프레임 업데이트
 
-	void SetOOBB();			// 충돌박스
-	void SetPosition(Vec3 pos);
-	void SetColor(Vec4 color);
-	void SetSize(float size);
-	void SetMass(float mass);
+	virtual void SetOOBB();								// 충돌박스
+	
+	virtual void SetPosition(Vec3 pos);
+	Vec3 GetPosition();
+
+	virtual void SetColor(Vec4 color);
+	virtual void SetSize(float size);
+	virtual void SetMass(float mass);
 };
 
