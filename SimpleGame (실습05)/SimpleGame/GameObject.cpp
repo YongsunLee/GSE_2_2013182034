@@ -61,19 +61,26 @@ void GameObject::Update(float fTimeElapsed)
 void GameObject::SetOOBB()
 {
 	// OOBB
-	m_nOOBB = {m_nPosition.x - m_nSize/2 , m_nPosition.y - m_nSize/2, m_nPosition.x + m_nSize/2, m_nPosition.y + m_nSize/2};
+	m_nOOBB = {m_nPosition.x - m_nSize/2.f , m_nPosition.y - m_nSize/2.f, 
+			   m_nPosition.x + m_nSize/2.f , m_nPosition.y + m_nSize/2.f};
 }
 
 bool GameObject::Collision(GameObject *gObject)
 {
-	SetOOBB();
-
 	if (m_nOOBB.left > gObject->m_nOOBB.right) return false;
 	if (m_nOOBB.right < gObject->m_nOOBB.left) return false;
 	if (m_nOOBB.top < gObject->m_nOOBB.bottom) return false;
 	if (m_nOOBB.bottom > gObject->m_nOOBB.top) return false;
 
 	return true;
+}
+void GameObject::SetCollision(bool status)
+{
+	m_bCollision = status;
+}
+bool GameObject::GetCollision()
+{
+	return m_bCollision;
 }
 //--------------------------------------------------------------------
 
@@ -98,6 +105,11 @@ void GameObject::SetColor(Vec4 color)
 Vec4 GameObject::GetColor()
 {
 	return Vec4(m_nColor);
+}
+
+void GameObject::SetDir(Vec3 dir)
+{
+	m_nDir = dir;
 }
 
 void GameObject::SetSize(float size)

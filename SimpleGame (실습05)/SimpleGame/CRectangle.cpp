@@ -9,7 +9,7 @@ CRectangle::CRectangle()
 	m_nOOBB = { 0.0f,0.0f,0.0f,0.0f };
 	m_nMass = 0.0f;
 	m_nSize = 0.0f;
-	m_nDir	= { 1.0f, 0.0f, 0.0f };
+	m_nDir	= { 0.0f, 0.0f, 0.0f };
 	m_nLife = 0.f;
 }
 
@@ -18,7 +18,6 @@ CRectangle::CRectangle(Vec3 pos, float size, Vec4 color)
 	m_nPosition = pos;
 	m_nColor = color;
 	m_nSize = size;
-	m_nDir = {1.0f, 0.f, 0.f};
 }
 
 CRectangle::~CRectangle()
@@ -44,5 +43,5 @@ void CRectangle::Draw(Renderer * g_Renderer)
 void CRectangle::Update(float fTimeElapsed)
 {
 	// 테스트용 무브함수
-	Move(m_nSpeed * fTimeElapsed * 50);
+	Move(m_nSpeed * fTimeElapsed * 30);
 }

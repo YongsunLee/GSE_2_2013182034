@@ -34,10 +34,12 @@ void CSceneMgr::inIt()
 		float speed = ui_speed(dre);
 
 		m_pObject[i].SetPosition(Vec3{ xPos, yPos, 0 });
+		m_pObject[i].SetDir(Vec3{ 1.f, 1.f, 0.f});
 		m_pObject[i].SetColor(Vec4{ 1.f, 1.f, 1.f, 1.f });
 		m_pObject[i].SetSize(10.f);
 		m_pObject[i].SetSpeed(speed);
-
+		m_pObject[i].SetOOBB();
+		//m_pObject[i].SetLife();
 	}
 }
 
@@ -49,13 +51,17 @@ void CSceneMgr::Update()
 		m_pObject[i].Update(m_fTimeElapsed);
 
 	for (int i = 0; i < m_nObject; ++i) {
-		for (int j = 0; j < m_nObject; ++j) {
+		for (int j = i+1; j < m_nObject; ++j) {
 			if (m_pObject[i].Collision(&m_pObject[j])) {
-				m_pObject[i].SetColor(Vec4{ 1.0f, 0.0f, 0.0f, 0.0f });
+				m_pObject[i].SetCollision(true);
+				m_pObject[j].SetCollision(true);
 			}
-			else 
-				m_pObject[i].SetColor(Vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
 		}
+	}
+
+	for (int i = 0; i < m_nObject; ++i) {
+		if (m_pObject[i].GetCollision())
+			m_pObject->SetColor(Vec4{ 1.f, 0.f, 0.f, 0.f });
 	}
 
 }
