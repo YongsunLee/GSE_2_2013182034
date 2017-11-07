@@ -12,6 +12,7 @@ GameObject::GameObject()
 	m_nSize = 0.0f;
 	m_nDir = {0.0f, 0.0f, 0.0f};
 	m_nLife = 0.f;
+	m_nLifeTime = 100000.f;
 }
 
 GameObject::~GameObject()
@@ -69,9 +70,9 @@ bool GameObject::Collision(GameObject *gObject1,GameObject *gObject2)
 {
 	SetOOBB();
 
-	if (gObject1->m_nOOBB.left > gObject2->m_nOOBB.right) return false;
-	if (gObject1->m_nOOBB.right < gObject2->m_nOOBB.left) return false;
-	if (gObject1->m_nOOBB.top < gObject2->m_nOOBB.bottom) return false;
+	if (gObject1->m_nOOBB.left	 > gObject2->m_nOOBB.right) return false;
+	if (gObject1->m_nOOBB.right	 < gObject2->m_nOOBB.left) return false;
+	if (gObject1->m_nOOBB.top	 < gObject2->m_nOOBB.bottom) return false;
 	if (gObject1->m_nOOBB.bottom > gObject2->m_nOOBB.top) return false;
 
 	return true;
@@ -136,6 +137,11 @@ void GameObject::SetLife(float life)
 float GameObject::GetLife()
 {
 	return m_nLife;
+}
+
+float GameObject::GetLifeTime()
+{
+	return m_nLifeTime;
 }
 
 void GameObject::SetType(OBJECT_TYPE type)

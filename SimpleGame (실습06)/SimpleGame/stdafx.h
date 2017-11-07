@@ -10,6 +10,7 @@
 #include <iostream>
 #include <random>
 #include <chrono>
+#include <vector>
 using namespace std;
 
 #include <Windows.h>

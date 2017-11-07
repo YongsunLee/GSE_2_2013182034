@@ -48,6 +48,9 @@
     <ClInclude Include="SceneMgr.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -67,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="SceneMgr.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

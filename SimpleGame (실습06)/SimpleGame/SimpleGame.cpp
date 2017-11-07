@@ -18,10 +18,9 @@ but WITHOUT ANY WARRANTY.
 #include "CRectangle.h"
 #include "SceneMgr.h"
 
-Renderer *g_Renderer = NULL;
 bool gl_mLButton = false;
 bool gl_mRButton = false;
-CSceneMgr g_SceneMgr;
+CSceneMgr* g_SceneMgr;
 
 enum MouseInputSide {
 	LEFT = 0,
@@ -39,7 +38,7 @@ void RenderScene(void)
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
 	// GameObject Test
-	g_SceneMgr.Draw(g_Renderer);
+	g_SceneMgr->Draw();
 
 	glutSwapBuffers();
 }
@@ -47,7 +46,7 @@ void RenderScene(void)
 // 계속 실행
 void Idle(void)
 {
-	g_SceneMgr.Update();
+	g_SceneMgr->Update();
 	RenderScene();
 }
 
@@ -60,21 +59,23 @@ void MouseInput(int button, int state, int x, int y)
 	// 다운 메세지를 처리하고 업 메세지로 풀어주는 상황이 필요하다.
 
 	// LButtonDown True
-	if (button == BUTTONDOWN && state == LEFT) {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
 		gl_mLButton = true;
-		float windowX = (float)(x - (float)WINDOWWIDTH / 2.0);
-		float windowY = -(y - (float)WINDOWHEIGHT / 2.0);
-
-		g_SceneMgr.AddClickObject(windowX, windowY);
 	}
 
-	// 이벤트 체크
-	if (button == BUTTONUP && state == LEFT) {
-		if (gl_mLButton == true) {
-			
-			gl_mLButton = false;
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+	{
+		if (gl_mLButton)
+		{
+			float windowX = (float)(x - (float)WINDOWWIDTH / 2.0);
+			float windowY = -(y - (float)WINDOWHEIGHT / 2.0);
+
+			g_SceneMgr->AddClickObject(windowX, windowY);
 		}
+		gl_mLButton = false;
 	}
+
 
 	RenderScene();
 }
@@ -112,14 +113,9 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 
-	// Initialize Renderer
-	g_Renderer = new Renderer(WINDOWWIDTH, WINDOWHEIGHT);
-	if (!g_Renderer->IsInitialized())
-	{
-		std::cout << "Renderer could not be initialized.. \n";
-	}
+	g_SceneMgr = new CSceneMgr();
 
-	g_SceneMgr.inIt();
+	g_SceneMgr->inIt();
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
@@ -129,8 +125,8 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 
-	delete g_Renderer;
-
+	delete g_SceneMgr;
+	
     return 0;
 }
 

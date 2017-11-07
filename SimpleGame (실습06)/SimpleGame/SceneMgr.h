@@ -1,5 +1,6 @@
 #pragma once
 
+
 class Renderer;
 class GameObject;
 
@@ -11,18 +12,19 @@ public:
 	void inIt();
 	void AddClickObject(float x, float y);
 	
+	void Collision();
 	void Update();
-	void Draw(Renderer *g_Renderer);
+	void Draw();
 
 	void UpdateFPS();
 
 private:
-	GameObject*		m_pObject;
-	int				m_nObject;
+	Renderer*			m_gRenderer;
 
-	GameObject*		m_pClickObject;
-	int				m_nClickObject;
+	vector<GameObject*>	m_pObject	;
+	vector<GameObject*>	m_pBuilding ;
+	vector<GameObject*>	m_pArrow	;
 
-	float			m_fTimeElapsed;
+	float				m_fTimeElapsed;
 
 };

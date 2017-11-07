@@ -13,10 +13,12 @@ protected:
 	float m_nSize;			// 크기
 	float m_nMass;			// 질량
 	float m_nSpeed;			// 이동속도
-	float m_nLife;			// 생명
 
 	OOBB m_nOOBB;			// 충돌 박스 위치 LTOP_x, LTOP_y, RBOT_x, RBOT_y
-	bool m_bCollision;
+	bool m_bCollision;		// 충돌 확인
+
+	float m_nLife;			// 생명
+	float m_nLifeTime;		// 생명시간
 
 	OBJECT_TYPE m_type;
 
@@ -29,7 +31,7 @@ public:
 	virtual void Rotate(Vec3 pxmf3Axis, float fAngle);
 	//-------------------
 
-	virtual void Draw(Renderer *g_Renderer);			// 오브젝트 생성
+	virtual void Draw(Renderer *g_Renderer);								// 오브젝트 생성
 	virtual void Update(float fTimeElapsed);								// 프레임 업데이트
 
 	// ----------------- 충돌 체크--------------------
@@ -54,6 +56,8 @@ public:
 
 	virtual void SetLife(float life);
 	virtual float GetLife();
+
+	virtual float GetLifeTime();
 
 	virtual void SetType(OBJECT_TYPE type);
 	virtual OBJECT_TYPE GetType();
