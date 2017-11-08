@@ -25,6 +25,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{ee96b513-89be-45d4-a725-96e434337c3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Building">
+      <UniqueIdentifier>{c9096566-a9cc-4667-b3b7-938703d5bfce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -49,7 +52,7 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Building.h">
-      <Filter>GameObject</Filter>
+      <Filter>GameObject\Building</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -72,7 +75,7 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Building.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>GameObject\Building</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
