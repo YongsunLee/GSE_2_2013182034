@@ -75,7 +75,8 @@ void CSceneMgr::Collision()
 					{
 						collisionCount++;
 						m_pBuilding[i]->SetLife(m_pBuilding[i]->GetLife() - m_pObject[j]->GetLife());
-						//DeleteObject(m_pObject, j);
+						m_pObject[i]->SetLife(m_pObject[j]->GetLife() - m_pBuilding[i]->GetLife());
+
 					}
 				}
 			}
@@ -91,7 +92,7 @@ void CSceneMgr::Collision()
 					{
 						collisionCount++;
 						m_pBuilding[i]->SetLife(m_pBuilding[i]->GetLife() - m_pArrow[j]->GetLife());
-						//DeleteObject(m_pArrow, j);
+						m_pArrow[i]->SetLife(m_pArrow[j]->GetLife() - m_pBuilding[i]->GetLife());
 					}
 				}
 			}
@@ -107,29 +108,13 @@ void CSceneMgr::Collision()
 	}
 
 	// Character
-	for (int i = 0; i < m_pObject.size(); i++)
+	for (int i = 0; i < m_pObject.size(); ++i)
 	{
 		collisionCount = 0;
 		if (m_pObject[i] != NULL)
 		{
-			// Building
-			for (int j = 0; j < m_pBuilding.size(); j++)
-			{
-				if (m_pBuilding[j] != NULL)
-				{
-					m_pObject[i]->SetOOBB();
-					m_pBuilding[j]->SetOOBB();
-					if (m_pObject[i]->Collision(m_pObject[i], m_pBuilding[j]))
-					{
-						collisionCount++;
-						m_pObject[i]->SetLife(m_pObject[i]->GetLife() - m_pBuilding[j]->GetLife());
-						//DeleteObject(m_pObject, j);
-					}
-				}
-			}
-
 			// Arrow
-			for (int j = 0; j < m_pArrow.size(); j++)
+			for (int j = 0; j < m_pArrow.size(); ++j)
 			{
 				if (m_pArrow[j] != NULL)
 				{
@@ -139,19 +124,37 @@ void CSceneMgr::Collision()
 					{
 						collisionCount++;
 						m_pObject[i]->SetLife(m_pObject[i]->GetLife() - m_pArrow[j]->GetLife());
-						//DeleteObject(m_pArrow, j);
+						m_pArrow[i]->SetLife(m_pArrow[j]->GetLife() - m_pObject[i]->GetLife());
 					}
 				}
 			}
 			if (collisionCount > 0)
 			{
-				m_pBuilding[i]->SetColor(Vec4{ 1,0,0,1 });
+				m_pObject[i]->SetColor(Vec4{ 1,0,0,1 });
 			}
 			else
 			{
-				m_pBuilding[i]->SetColor(Vec4{ 1,1,0,1 });
+				m_pObject[i]->SetColor(Vec4{ 1,1,1,1 });
 			}
 		}
+	}
+
+	// 체력 고갈시 사망
+	for (int i = 0; i < m_pBuilding.size();) {
+		if (m_pBuilding[i]->GetLife() <= 0.f) m_pBuilding.erase(m_pBuilding.begin() + i);
+		else ++i;
+	}
+
+	// 캐릭터
+	for (int i = 0; i < m_pObject.size();) {
+		if (m_pObject[i]->GetLife() <= 0.f) m_pObject.erase(m_pObject.begin() + i);
+		else ++i;
+	}
+
+	// 화살
+	for (int i = 0; i < m_pArrow.size();) {
+		if (m_pArrow[i]->GetLife() <= 0.f) m_pArrow.erase(m_pArrow.begin() + i);
+		else ++i;
 	}
 
 }
@@ -162,7 +165,7 @@ void CSceneMgr::Update()
 
 	float bulletTimer = 0.f;
 	bulletTimer += m_fTimeElapsed * 5.f;
-	if (bulletTimer >= 0.5f) {
+	if (bulletTimer >= 0.1f) {
 		for (int i = 0; i < m_pBuilding.size(); ++i) {
 			CRectangle* bullet = new CRectangle(m_pBuilding[i]->GetPosition(), 4.f, Vec4{ 1,0,0,1 }, OBJECT_TYPE::OBJECT_BULLET);
 			bullet->SetDir(Vec3{1,1,1});
@@ -175,7 +178,7 @@ void CSceneMgr::Update()
 
 	float arrowTimer = 0.f;
 	arrowTimer += m_fTimeElapsed * 10;
-	if (arrowTimer >= 0.5f) {
+	if (arrowTimer >= 0.3f) {
 		for (int i = 0; i < m_pObject.size(); ++i) {
 			CRectangle* arrow = new CRectangle(m_pObject[i]->GetPosition(), 2.f, Vec4{ 0,1,0,1 }, OBJECT_TYPE::OBJECT_ARROW);
 			arrow->SetDir(Vec3{ 1,1,0 });
@@ -185,17 +188,6 @@ void CSceneMgr::Update()
 		}
 		arrowTimer = 0.f;
 	}
-
-	// 체력 고갈시 사망
-	for (int i = 0; i < m_pBuilding.size(); ++i) {
-		if (m_pBuilding[i]->GetLife() <= 0.f) m_pBuilding.erase(m_pBuilding.begin() + i);
-	}
-
-	/*
-	for (int i = 0; i < m_pObject.size(); ++i) {
-		if (m_pObject[i]->GetLife() <= 0.f) m_pObject.erase(m_pObject.begin() + i);
-	}
-	*/
 
 	for (auto &p : m_pBuilding)		p->Update(m_fTimeElapsed);
 	for (auto &p : m_pObject)		p->Update(m_fTimeElapsed);
