@@ -27,8 +27,9 @@ void CSceneMgr::inIt()
 {
 	for (int i = 0; i < 3; ++i) {
 		// ÆÀ 1 ºôµù
-		CBuilding* building = new CBuilding(Vec3{ -130.f + ( i * 130.f), 300.f, 0 }, 100.f, Vec4{ 1,1,1,1 }, OBJECT_TYPE::OBJECT_BUILDING);
+		CBuilding* building = new CBuilding(Vec3{ -130.f + ( i * 130.f), 280.f, 0 }, 100.f, Vec4{ 1,1,1,1 }, OBJECT_TYPE::OBJECT_BUILDING);
 		building->SetLife(500.f);
+		building->SetMaxHP();
 		building->SetTeam(OBJECT_TYPE::TEAM_1);
 		m_pTeam1Building.push_back(building);
 	}
@@ -37,6 +38,7 @@ void CSceneMgr::inIt()
 		//ÆÀ 2 ºôµù
 		CBuilding* building = new CBuilding(Vec3{ -130.f + (i * 130.f), -300.f, 0 }, 100.f, Vec4{ 1,1,1,1 }, OBJECT_TYPE::OBJECT_BUILDING);
 		building->SetLife(500.f);
+		building->SetMaxHP();
 		building->SetTeam(OBJECT_TYPE::TEAM_2);
 		m_pTeam2Building.push_back(building);
 	}
@@ -50,10 +52,11 @@ void CSceneMgr::AddClickObject(float x, float y)
 {
 	// Ä³¸¯ÅÍ
 	if (m_pObject.size() < MAX_OBJECT_COUNT && clickTimer > 2.f) {
-		CRectangle* character = new CRectangle(Vec3{x, y, 0}, 10.f, Vec4{1,1,1,1}, OBJECT_TYPE::OBJECT_CHARACTER);
-		character->SetLife(10.f);
+		CRectangle* character = new CRectangle(Vec3{x, y, 0}, 30.f, Vec4{0,0,1,1}, OBJECT_TYPE::OBJECT_CHARACTER);
+		character->SetLife(100.f);
+		character->SetMaxLife();
 		character->SetDir(Vec3{ 1,0,0 });
-		character->SetSpeed(10.f);
+		character->SetSpeed(300.f * m_fTimeElapsed);
 		character->SetTeam(OBJECT_TYPE::TEAM_2);
 		m_pObject.push_back(character);
 		clickTimer = 0.f;
@@ -69,7 +72,7 @@ void CSceneMgr::DeleteObject(vector<GameObject*> cont, int index)
 
 void CSceneMgr::Collision()
 {
-	// Team1Building
+	// Àû ºôµù
 	for (int i = 0; i < m_pTeam1Building.size(); i++)
 	{
 		if (m_pTeam1Building[i] != NULL)
@@ -85,21 +88,6 @@ void CSceneMgr::Collision()
 					{
 						m_pTeam1Building[i]->SetLife(m_pTeam1Building[i]->GetLife() - m_pObject[j]->GetLife());
 						m_pObject[j]->SetLife(m_pObject[j]->GetLife() - m_pTeam1Building[i]->GetLife());
-					}
-				}
-			}
-
-			// Character
-			for (int j = 0; j < m_pEnemyObject.size(); j++)
-			{
-				if (m_pEnemyObject[j] != NULL)
-				{
-					m_pTeam1Building[i]->SetOOBB();
-					m_pEnemyObject[j]->SetOOBB();
-					if (m_pTeam1Building[i]->Collision(m_pTeam1Building[i], m_pEnemyObject[j]))
-					{
-						m_pTeam1Building[i]->SetLife(m_pTeam1Building[i]->GetLife() - m_pEnemyObject[j]->GetLife());
-						m_pEnemyObject[j]->SetLife(m_pEnemyObject[j]->GetLife() - m_pTeam1Building[i]->GetLife());
 					}
 				}
 			}
@@ -133,27 +121,12 @@ void CSceneMgr::Collision()
 
 	}
 
-	// Team2Building
+	// ÇÃ·¹ÀÌ¾î ºôµù
 	for (int i = 0; i < m_pTeam2Building.size(); i++)
 	{
 		if (m_pTeam2Building[i] != NULL)
 		{
-			// Character
-			for (int j = 0; j < m_pObject.size(); j++)
-			{
-				if (m_pObject[j] != NULL)
-				{
-					m_pTeam2Building[i]->SetOOBB();
-					m_pObject[j]->SetOOBB();
-					if (m_pTeam2Building[i]->Collision(m_pTeam2Building[i], m_pObject[j]))
-					{
-						m_pTeam2Building[i]->SetLife(m_pTeam2Building[i]->GetLife() - m_pObject[j]->GetLife());
-						m_pObject[j]->SetLife(m_pObject[j]->GetLife() - m_pTeam2Building[i]->GetLife());
-					}
-				}
-			}
-
-			// Character
+			// Àû
 			for (int j = 0; j < m_pEnemyObject.size(); j++)
 			{
 				if (m_pEnemyObject[j] != NULL)
@@ -196,7 +169,7 @@ void CSceneMgr::Collision()
 		}
 	}
 
-	// Character
+	// ÇÃ·¹ÀÌ¾î
 	for (int i = 0; i < m_pObject.size(); ++i)
 	{
 		if (m_pObject[i] != NULL)
@@ -229,7 +202,7 @@ void CSceneMgr::Collision()
 		}
 	}
 
-	// EnemyCharacter
+	// Àû
 	for (int i = 0; i < m_pEnemyObject.size(); ++i)
 	{
 		if (m_pEnemyObject[i] != NULL)
@@ -262,45 +235,8 @@ void CSceneMgr::Collision()
 		}
 	}
 
-	for (int i = 0; i < m_pArrow.size(); ++i)
-	{
-		if (m_pArrow[i] != NULL)
-		{
-			// Character
-			for (int j = 0; j < m_pObject.size(); j++)
-			{
-				if (m_pObject[j] != NULL)
-				{
-					m_pArrow[i]->SetOOBB();
-					m_pObject[j]->SetOOBB();
-					if (m_pArrow[i]->Collision(m_pArrow[i], m_pObject[j]))
-					{
-						m_pArrow[i]->SetLife(m_pArrow[i]->GetLife() - m_pObject[j]->GetLife());
-						m_pObject[j]->SetLife(m_pObject[j]->GetLife() - m_pArrow[i]->GetLife());
-					}
-				}
-			}
-
-			// Character
-			for (int j = 0; j < m_pEnemyObject.size(); j++)
-			{
-				if (m_pEnemyObject[j] != NULL)
-				{
-					m_pArrow[i]->SetOOBB();
-					m_pEnemyObject[j]->SetOOBB();
-					if (m_pArrow[i]->Collision(m_pArrow[i], m_pEnemyObject[j]))
-					{
-						m_pArrow[i]->SetLife(m_pArrow[i]->GetLife() - m_pEnemyObject[j]->GetLife());
-						m_pEnemyObject[j]->SetLife(m_pEnemyObject[j]->GetLife() - m_pArrow[i]->GetLife());
-					}
-				}
-			}
-		}
-	}
-
 	// Ã¼·Â < 0 »ç¸Á
 	// ºôµù
-	
 	for(auto iter = m_pTeam1Building.begin(); iter != m_pTeam1Building.end();){
 		if ((*iter)->GetLife() <= 0.f) 
 			iter = m_pTeam1Building.erase(iter);
@@ -402,18 +338,18 @@ void CSceneMgr::ShotArrowNBullet()
 	if (bulletTimer >= 1.f) {
 		for (int i = 0; i < m_pTeam1Building.size(); ++i) {
 			CRectangle* bullet = new CRectangle(m_pTeam1Building[i]->GetPosition(), 4.f, Vec4{ 1,0,0,1 }, OBJECT_TYPE::OBJECT_BULLET);
-			bullet->SetDir(Vec3{ 1,1,1 });
-			bullet->SetLife(10.f);
-			bullet->SetSpeed(20.f);
+			bullet->SetDir(Vec3{ 0,-1,0 });
+			bullet->SetLife(15.f);
+			bullet->SetSpeed(600.f * m_fTimeElapsed);
 			bullet->SetTeam(OBJECT_TYPE::TEAM_1);
 			m_pBullet.push_back(bullet);
 		}
 
 		for (int i = 0; i < m_pTeam2Building.size(); ++i) {
 			CRectangle* bullet = new CRectangle(m_pTeam2Building[i]->GetPosition(), 4.f, Vec4{ 0,0,1,1 }, OBJECT_TYPE::OBJECT_BULLET);
-			bullet->SetDir(Vec3{ 1,1,1 });
-			bullet->SetLife(10.f);
-			bullet->SetSpeed(20.f);
+			bullet->SetDir(Vec3{ 0,1,0 });
+			bullet->SetLife(15.f);
+			bullet->SetSpeed(600.f * m_fTimeElapsed);
 			bullet->SetTeam(OBJECT_TYPE::TEAM_2);
 			m_pBullet.push_back(bullet);
 		}
@@ -423,11 +359,11 @@ void CSceneMgr::ShotArrowNBullet()
 	for (int i = 0; i < m_pEnemyObject.size(); ++i) {
 		if (m_pEnemyObject[i]->GetArrowTimer() > 1.f) {
 			CRectangle* arrow = new CRectangle(m_pEnemyObject[i]->GetPosition(), 
-											   5.f, 
-											   Vec4{ 0.5f,1.f,0.7f,1 }, 
+											   4.f, 
+											   Vec4{ 0.5f,0.2f,0.7f,1 }, 
 											   OBJECT_TYPE::OBJECT_ARROW);
 			arrow->SetDir(Vec3{ 1,-1,0 });
-			arrow->SetSpeed(10.f);
+			arrow->SetSpeed(100.f* m_fTimeElapsed);
 			arrow->SetLife(10.f);
 			arrow->SetTeam(m_pEnemyObject[i]->GetTeam());
 			m_pArrow.push_back(arrow);
@@ -438,11 +374,11 @@ void CSceneMgr::ShotArrowNBullet()
 	for (int i = 0; i < m_pObject.size(); ++i) {
 		if (m_pObject[i]->GetArrowTimer() > 1.f) {
 			CRectangle* arrow = new CRectangle(m_pObject[i]->GetPosition(),
-											   5.f,
-											   Vec4{ 1.f,0.0f, 0.0f,1 },
+											   4.f,
+											   Vec4{1.f, 1.0f, 0.0f,1 },
 											   OBJECT_TYPE::OBJECT_ARROW);
 			arrow->SetDir(Vec3{ 1,1,0 });
-			arrow->SetSpeed(10.f);
+			arrow->SetSpeed(100.f * m_fTimeElapsed);
 			arrow->SetLife(10.f);
 			arrow->SetTeam(m_pObject[i]->GetTeam());
 			m_pArrow.push_back(arrow);
@@ -455,13 +391,14 @@ void CSceneMgr::ShotArrowNBullet()
 void CSceneMgr::RespawnObject()
 {
 	respawnTimer += m_fTimeElapsed;
-	if (respawnTimer >= 1.f) {
+	if (respawnTimer >= 5.f) {
 		float xPos = rand() % 500 - 250;
 		float yPos = rand() % 250;
 
-		CRectangle* Enemy = new CRectangle(Vec3{xPos, yPos, 0}, 10, Vec4{1,0,0,1}, OBJECT_TYPE::OBJECT_CHARACTER);
+		CRectangle* Enemy = new CRectangle(Vec3{xPos, yPos, 0}, 30.f, Vec4{1,0,0,1}, OBJECT_TYPE::OBJECT_CHARACTER);
 		Enemy->SetDir(Vec3{ 1, 0, 0 });
-		Enemy->SetLife(10.f);
+		Enemy->SetLife(100.f);
+		Enemy->SetMaxLife();
 		Enemy->SetSpeed(300.f * m_fTimeElapsed);
 		Enemy->SetTeam(OBJECT_TYPE::TEAM_1);
 		m_pEnemyObject.push_back(Enemy);

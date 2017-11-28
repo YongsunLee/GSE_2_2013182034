@@ -39,9 +39,15 @@ void CBuilding::Draw(Renderer * g_Renderer, unsigned int textureID)
 	g_Renderer->DrawTexturedRect(m_nPosition.x, m_nPosition.y, m_nPosition.z,
 		m_nSize,
 		m_nColor.r, m_nColor.g, m_nColor.b, m_nColor.a, textureID, 0.2f);
+
+	g_Renderer->DrawSolidRectGauge(m_nPosition.x, m_nPosition.y + 60.f, m_nPosition.z,
+								   m_nSize, 5.f, 
+								   1.0f, 0.0f, 0.0f, 1.0f, 
+								   HP, 
+								   0.2f);
 }
 
 void CBuilding::Update(float fTimeElapsed)
 {
-	
+	HP = m_nLife / m_maxLife;
 }

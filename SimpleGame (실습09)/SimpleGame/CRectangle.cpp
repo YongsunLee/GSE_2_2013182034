@@ -40,6 +40,14 @@ void CRectangle::Draw(Renderer * g_Renderer)
 							  m_nSize,
 							  m_nColor.r, m_nColor.g, m_nColor.b, m_nColor.a, 0.3);
 
+	if (m_objectType == OBJECT_TYPE::OBJECT_CHARACTER) {
+		g_Renderer->DrawSolidRectGauge(m_nPosition.x, m_nPosition.y + m_nSize, m_nPosition.z,
+									   m_nSize, 5.f,
+									   1.0f, 0.0f, 0.0f, 1.0f, 
+									   HP, 
+									   0.3f);
+	}
+
 }
 
 void CRectangle::Update(float fTimeElapsed)
@@ -48,4 +56,6 @@ void CRectangle::Update(float fTimeElapsed)
 	Move(m_nSpeed * fTimeElapsed * 30);
 
 	m_arrowTimer += fTimeElapsed;
+
+	HP = m_nLife / m_maxLife;
 }
