@@ -28,7 +28,7 @@ struct Vec3 {
 	float z;
 
 	Vec3 nomal(){
-		float max = (pow(x,2) + pow(y,2) + pow(z,2));
+		float max = sqrt(pow(x,2) + pow(y,2) + pow(z,2));
 		return Vec3{ x / max, y / max, z / max };
 	}
 };

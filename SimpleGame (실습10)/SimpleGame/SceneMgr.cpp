@@ -64,8 +64,8 @@ void CSceneMgr::AddClickObject(float x, float y)
 		CRectangle* character = new CRectangle(Vec3{x, y, 0}, 30.f, Vec4{0,0,1,1}, OBJECT_TYPE::OBJECT_CHARACTER);
 		character->SetLife(100.f);
 		character->SetMaxLife();
-		m_dir.x = rand() % 36;
-		m_dir.y = rand() % 36;
+		m_dir.x = rand() % 36 - 18;
+		m_dir.y = rand() % 36 - 18;
 		m_dir.z = 0;
 		character->SetDir(m_dir.nomal());
 		character->SetSpeed(300.f);
@@ -323,6 +323,7 @@ void CSceneMgr::Update()
 
 void CSceneMgr::Draw()
 {
+	// 배경화면
 	m_gRenderer->DrawTexturedRect(0.0f, 0.0f, 0.0f, 800.f, 1, 1, 1, 1, m_BackGroundTextureID, 0.6f);
 
 	for (auto &p : m_pTeam1Building)		p->Draw(m_gRenderer, m_textureID[0]);
@@ -331,13 +332,6 @@ void CSceneMgr::Draw()
 	for (auto &p : m_pEnemyObject)			p->Draw(m_gRenderer, m_textureID[2]);
 	for (auto &p : m_pArrow)				p->Draw(m_gRenderer);
 	for (auto &p : m_pBullet)				p->Draw(m_gRenderer, m_ParticleTextureID);
-
-	m_gRenderer->DrawParticle(0.0f, 0.0f, 0.0f, 
-							  50.f, 
-							  1, 1, 1, 1,
-							  1, 1, m_ParticleTextureID, bulletTimer);
-
-	// 배경화면
 }
 
 void CSceneMgr::UpdateFPS()
@@ -359,8 +353,8 @@ void CSceneMgr::ShotArrowNBullet()
 	if (bulletTimer >= 1.f) {
 		for (int i = 0; i < m_pTeam1Building.size(); ++i) {
 			CRectangle* bullet = new CRectangle(m_pTeam1Building[i]->GetPosition(), 10.f, Vec4{ 1,0,0,1 }, OBJECT_TYPE::OBJECT_BULLET);
-			m_dir.x = rand() % 36;
-			m_dir.y = rand() % 36;
+			m_dir.x = rand() % 36 - 18;
+			m_dir.y = rand() % 36 - 18;
 			m_dir.z = 0;
 			bullet->SetDir(m_dir.nomal());
 			//bullet->SetDir(Vec3{ 0,-1,0 });
@@ -372,8 +366,8 @@ void CSceneMgr::ShotArrowNBullet()
 
 		for (int i = 0; i < m_pTeam2Building.size(); ++i) {
 			CRectangle* bullet = new CRectangle(m_pTeam2Building[i]->GetPosition(), 10.f, Vec4{ 0,0,1,1 }, OBJECT_TYPE::OBJECT_BULLET);
-			m_dir.x = rand() % 36;
-			m_dir.y = rand() % 36;
+			m_dir.y = rand() % 36 - 18;
+			m_dir.x = rand() % 36 - 18;
 			m_dir.z = 0;
 			bullet->SetDir(m_dir.nomal());
 			//bullet->SetDir(Vec3{ 0,1,0 });
@@ -391,8 +385,8 @@ void CSceneMgr::ShotArrowNBullet()
 											   4.f, 
 											   Vec4{ 0.5f,0.2f,0.7f,1 }, 
 											   OBJECT_TYPE::OBJECT_ARROW);
-			m_dir.x = rand() % 36;
-			m_dir.y = rand() % 36;
+			m_dir.x = rand() % 36 - 18;
+			m_dir.y = rand() % 36 - 18;
 			m_dir.z = 0;
 			arrow->SetDir(m_dir.nomal());
 			//arrow->SetDir(Vec3{ 1,-1,0 });
@@ -410,8 +404,8 @@ void CSceneMgr::ShotArrowNBullet()
 											   4.f,
 											   Vec4{1.f, 1.0f, 0.0f,1 },
 											   OBJECT_TYPE::OBJECT_ARROW);
-			m_dir.x = rand() % 36;
-			m_dir.y = rand() % 36;
+			m_dir.x = rand() % 36 - 18;
+			m_dir.y = rand() % 36 - 18;
 			m_dir.z = 0;
 			arrow->SetDir(m_dir.nomal());
 			//arrow->SetDir(Vec3{ 1,1,0 });
@@ -433,8 +427,8 @@ void CSceneMgr::RespawnObject()
 		float yPos = rand() % 250;
 
 		CRectangle* Enemy = new CRectangle(Vec3{xPos, yPos, 0}, 30.f, Vec4{1,0,0,1}, OBJECT_TYPE::OBJECT_CHARACTER);
-		m_dir.x = rand() % 36;
-		m_dir.y = rand() % 36;
+		m_dir.x = rand() % 36 - 18;
+		m_dir.y = rand() % 36 - 18;
 		m_dir.z = 0;
 		Enemy->SetDir(m_dir.nomal());
 		//Enemy->SetDir(Vec3{ 1, 0, 0 });

@@ -109,7 +109,7 @@ void CRectangle::Update(float fTimeElapsed)
 	}
 
 	// 테스트용 무브함수
-	Move(m_nSpeed * fTimeElapsed * 10);
+	Move(m_nSpeed * fTimeElapsed);
 
 	// 화살 타이머
 	m_arrowTimer += fTimeElapsed;
